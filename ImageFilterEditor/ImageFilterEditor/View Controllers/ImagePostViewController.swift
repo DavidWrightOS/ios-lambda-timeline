@@ -1,5 +1,5 @@
 //
-//  ImagePostViewController2.swift
+//  ImagePostViewController.swift
 //  ImageFilterEditor
 //
 //  Created by David Wright on 5/7/20.
@@ -11,7 +11,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 import Photos
 
-class ImagePostViewController2: UIViewController {
+class ImagePostViewController: UIViewController {
     
     let filters: [Filter] = [
         Filter.invertColors,
@@ -250,7 +250,7 @@ class ImagePostViewController2: UIViewController {
 
 // MARK: UICollectionViewDelegateFlowLayout
 
-extension ImagePostViewController2: UICollectionViewDelegateFlowLayout {
+extension ImagePostViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: cellWidth, height: cellWidth)
@@ -268,7 +268,7 @@ extension ImagePostViewController2: UICollectionViewDelegateFlowLayout {
 
 // MARK: UICollectionViewDataSource
 
-extension ImagePostViewController2: UICollectionViewDataSource {
+extension ImagePostViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filters.count
@@ -286,7 +286,7 @@ extension ImagePostViewController2: UICollectionViewDataSource {
 
 // MARK: UICollectionViewDelegate
 
-extension ImagePostViewController2: UICollectionViewDelegate, UIScrollViewDelegate {
+extension ImagePostViewController: UICollectionViewDelegate, UIScrollViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         currentFilter = filters[indexPath.item]
@@ -306,9 +306,9 @@ extension ImagePostViewController2: UICollectionViewDelegate, UIScrollViewDelega
     }
     
     // Uncomment this method to specify if the specified item should be highlighted during tracking
-    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return filters[indexPath.item].filter == currentFilter.filter
-    }
+//    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+//        return filters[indexPath.item].filter == currentFilter.filter
+//    }
 
     // Uncomment this method to specify if the specified item should be selected
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -318,7 +318,7 @@ extension ImagePostViewController2: UICollectionViewDelegate, UIScrollViewDelega
 
 // MARK: UIImagePickerControllerDelegate
 
-extension ImagePostViewController2: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ImagePostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[.editedImage] as? UIImage {
