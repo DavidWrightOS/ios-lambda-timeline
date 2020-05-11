@@ -26,7 +26,20 @@ class Filter {
     }
 }
 
+/*
+extension Filter: ImageFilterable {
+    
+    func filteredImage(inputImage: CIImage) -> CIImage {
+        <#code#>
+    }
+    
+    func resetFilterSettings() {
+        <#code#>
+    }
+}
+*/
 
+// Pre-defined filters
 extension Filter {
     
     static let invertColors = Filter(title: "Invert Colors",
@@ -40,17 +53,11 @@ extension Filter {
                                  isEnabled: false,
                                  sliderValue: 0)
     
-    static let sketchify = Filter(title: "Sketchify",
-                                  sfSymbolName: "scribble",
-                                  filter: CIFilter.lineOverlay(),
-                                  isEnabled: false,
-                                  sliderValue: 0)
-    
-    static let sketchify2 = Filter(title: "Sketchify",
-                                   sfSymbolName: "pencil.and.outline",
-                                   filter: CIFilter.lineOverlay(),
-                                   isEnabled: false,
-                                   sliderValue: 0)
+    static let lineOverlay = Filter(title: "Line Overlay",
+                                    sfSymbolName: "pencil.and.outline",
+                                    filter: CIFilter.lineOverlay(),
+                                    isEnabled: false,
+                                    sliderValue: 0)
     
     static let kaleidoscope = Filter(title: "Kaleidoscope",
                                      sfSymbolName: "circle.grid.hex",

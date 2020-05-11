@@ -10,20 +10,23 @@ import UIKit
 
 class FilterCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var bgView: UIView! {
-           didSet {
-               configureCell()
-           }
-       }
+    @IBOutlet weak var filterSFSymbolImageView: UIImageView! {
+        didSet {
+            configureCell()
+        }
+    }
     
-    @IBOutlet weak var filterSFSymbolImageView: UIImageView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        configureCell()
+    }
     
     private func configureCell() {
-        let bgViewWidth = bgView.bounds.width
-        
-        bgView.layer.cornerRadius = bgViewWidth * 0.5
-        bgView.layer.borderWidth = bgViewWidth * 0.025
-        bgView.layer.borderColor = UIColor.lightGray.cgColor
-        bgView.layer.masksToBounds = true
+        let cellWidth = contentView.frame.size.width
+        layer.cornerRadius = cellWidth * 0.5
+        layer.borderWidth = cellWidth * 0.04
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.masksToBounds = true
     }
 }

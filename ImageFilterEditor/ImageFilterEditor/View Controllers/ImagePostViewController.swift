@@ -11,17 +11,16 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 import Photos
 
+/*
+protocol ImageFilterable {
+    func filteredImage(inputImage: CIImage) -> CIImage
+    func resetFilterSettings()
+}
+*/
+
 class ImagePostViewController: UIViewController {
     
-    let filters: [Filter] = [
-        Filter.invertColors,
-        Filter.vignette,
-        Filter.sketchify,
-        Filter.sketchify2,
-        Filter.kaleidoscope,
-        Filter.perspectiveTransform
-    ]
-    
+    let filterController = FilterController()
     private let context = CIContext()
     
     var currentFilter: Filter! {
@@ -52,6 +51,8 @@ class ImagePostViewController: UIViewController {
         }
     }
     
+    private let flowLayout = ZoomAndSnapFlowLayout()
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var filterCollectionView: UICollectionView!
     @IBOutlet weak var filterSlider: UISlider!
@@ -60,21 +61,14 @@ class ImagePostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         filterCollectionView.delegate = self
         filterCollectionView.dataSource = self
+        filterCollectionView.collectionViewLayout = flowLayout
+        filterCollectionView.decelerationRate = .fast
+        
         currentFilter = Filter.invertColors
         originalImage = imageView.image
-        
-        /*
-        let cellScale: CGFloat = 0.6
-        let screenSize = UIScreen.main.bounds.size
-        let cellWidth = floor(screenSize.width * cellScale)
-        let insetX = (view.bounds.width - cellWidth) * 0.5
-        
-        let layout = filterCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
-        filterCollectionView.contentInset = UIEdgeInsets(top: 0, left: insetX, bottom: 0, right: insetX)
-        */
     }
     
     @IBAction func choosePhotoButtonPressed(_ sender: Any) {
@@ -129,6 +123,12 @@ class ImagePostViewController: UIViewController {
         
         var outputImage = inputImage
         
+        /*
+        for filter in filterController.filters {
+            outputImage = filter.filteredImage(inputImage: outputImage)
+        }
+        */
+        
         let invertColorsFilter = CIFilter.colorInvert()
         let vignetteFilter = CIFilter.vignette()
         let lineOverlayFilter = CIFilter.lineOverlay()
@@ -136,14 +136,14 @@ class ImagePostViewController: UIViewController {
         let perspectiveTransformFilter = CIFilter.perspectiveTransform()
         
         // Invert Colors
-        if filters[0].isEnabled {
+        if filterController.filters[0].isEnabled {
             invertColorsFilter.inputImage = outputImage
             guard let filteredImage = invertColorsFilter.outputImage else { return originalImage! }
             outputImage = filteredImage
         }
 
         // Vignette
-        if let sliderValue = filters[1].sliderValue, sliderValue > 0 {
+        if let sliderValue = filterController.filters[1].sliderValue, sliderValue > 0 {
             vignetteFilter.inputImage = outputImage
             vignetteFilter.radius = sliderValue * 100
             vignetteFilter.intensity = sliderValue * 2
@@ -153,7 +153,7 @@ class ImagePostViewController: UIViewController {
         }
 
         // Line Overlay (Sketchify)
-        if let sliderValue = filters[2].sliderValue, sliderValue > 0 {
+        if let sliderValue = filterController.filters[2].sliderValue, sliderValue > 0 {
             lineOverlayFilter.setValue(outputImage, forKey: kCIInputImageKey)
             lineOverlayFilter.nrNoiseLevel = 0.09 - (sliderValue * 0.09)
             lineOverlayFilter.edgeIntensity = 0.5 + (sliderValue * 2.0)
@@ -164,7 +164,7 @@ class ImagePostViewController: UIViewController {
         }
 
         // Kaleidoscope
-        if let sliderValue = filters[4].sliderValue, sliderValue > 0 {
+        if let sliderValue = filterController.filters[3].sliderValue, sliderValue > 0 {
             kaleidoscopeFilter.setValue(outputImage, forKey: kCIInputImageKey)
             kaleidoscopeFilter.angle = sliderValue * Float.pi * 4
             kaleidoscopeFilter.count = Int(sliderValue * 20)
@@ -176,7 +176,7 @@ class ImagePostViewController: UIViewController {
         }
 
         // PerspectiveTransform
-        if let sliderValue = filters[5].sliderValue {
+        if let sliderValue = filterController.filters[4].sliderValue {
             perspectiveTransformFilter.inputImage = outputImage
             let imageAspectRatio = outputImage.extent.width / outputImage.extent.height
             let leftSideYOffset: CGFloat = sliderValue > 0.5 ? 0 : (CGFloat(0.5 - sliderValue) * 500)
@@ -230,54 +230,21 @@ class ImagePostViewController: UIViewController {
         
         return UIImage(cgImage: renderedImage)
     }
-    
-    // MARK: CollectionViewLayout Properties
-    
-    let numberOfItemsToFitOnScreen: CGFloat = 5
-    let itemSpacing: CGFloat = 10//screenWidth * 0.05
-    
-    var sectionInset: CGFloat {
-        (collectionViewWidth - cellWidth + itemSpacing) * 0.5
-    }
-    var collectionViewWidth: CGFloat {
-        filterCollectionView.frame.size.width
-    }
-    var cellWidth: CGFloat {
-        (collectionViewWidth / numberOfItemsToFitOnScreen) - itemSpacing
-    }
 }
 
-
-// MARK: UICollectionViewDelegateFlowLayout
-
-extension ImagePostViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellWidth)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: sectionInset, bottom: 0, right: sectionInset)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return itemSpacing
-    }
-}
 
 // MARK: UICollectionViewDataSource
 
 extension ImagePostViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filters.count
+        return filterController.filters.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell", for: indexPath) as? FilterCollectionViewCell else { return UICollectionViewCell() }
     
-        let sfSymbolImage = UIImage(systemName: filters[indexPath.item].sfSymbolName)!
+        let sfSymbolImage = UIImage(systemName: filterController.filters[indexPath.item].sfSymbolName)!
         cell.filterSFSymbolImageView.image = sfSymbolImage
     
         return cell
@@ -288,37 +255,22 @@ extension ImagePostViewController: UICollectionViewDataSource {
 
 extension ImagePostViewController: UICollectionViewDelegate, UIScrollViewDelegate {
     
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let index = flowLayout.indexOfCenterItem {
+            currentFilter = filterController.filters[index]
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        currentFilter = filters[indexPath.item]
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let layout = filterCollectionView?.collectionViewLayout as! UICollectionViewFlowLayout
-        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
-        
-        var offset = targetContentOffset.pointee
-        let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
-        let roundedIndex = round(index)
-        
-        offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left, y: scrollView.contentInset.top)
-        
-        targetContentOffset.pointee = offset
-    }
-    
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-//    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-//        return filters[indexPath.item].filter == currentFilter.filter
-//    }
-
-    // Uncomment this method to specify if the specified item should be selected
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return filters[indexPath.item].filter == currentFilter.filter
+        currentFilter = filterController.filters[indexPath.item]
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
 
 // MARK: UIImagePickerControllerDelegate
 
 extension ImagePostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[.editedImage] as? UIImage {

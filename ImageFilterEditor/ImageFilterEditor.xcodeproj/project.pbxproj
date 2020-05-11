@@ -16,6 +16,8 @@
 		637EB35324640374007F5F86 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637EB35224640374007F5F86 /* FilterCollectionViewCell.swift */; };
 		637EB35524649259007F5F86 /* ImagePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637EB35424649259007F5F86 /* ImagePostViewController.swift */; };
 		637EB35A246510F2007F5F86 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637EB359246510F2007F5F86 /* Filter.swift */; };
+		63F2605F2468556500DAD4B9 /* ZoomAndSnapFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F2605E2468556500DAD4B9 /* ZoomAndSnapFlowLayout.swift */; };
+		63F2608A2468DCCE00DAD4B9 /* FilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F260892468DCCE00DAD4B9 /* FilterController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		637EB35224640374007F5F86 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		637EB35424649259007F5F86 /* ImagePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePostViewController.swift; sourceTree = "<group>"; };
 		637EB359246510F2007F5F86 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		63F2605E2468556500DAD4B9 /* ZoomAndSnapFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomAndSnapFlowLayout.swift; sourceTree = "<group>"; };
+		63F260892468DCCE00DAD4B9 /* FilterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				637EB3502463B541007F5F86 /* UIImage+Scaling.swift */,
+				63F2605E2468556500DAD4B9 /* ZoomAndSnapFlowLayout.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				637EB359246510F2007F5F86 /* Filter.swift */,
+				63F260892468DCCE00DAD4B9 /* FilterController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -196,7 +202,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				637EB3512463B541007F5F86 /* UIImage+Scaling.swift in Sources */,
+				63F2605F2468556500DAD4B9 /* ZoomAndSnapFlowLayout.swift in Sources */,
 				637EB33B2463A3F8007F5F86 /* AppDelegate.swift in Sources */,
+				63F2608A2468DCCE00DAD4B9 /* FilterController.swift in Sources */,
 				637EB35524649259007F5F86 /* ImagePostViewController.swift in Sources */,
 				637EB35324640374007F5F86 /* FilterCollectionViewCell.swift in Sources */,
 				637EB35A246510F2007F5F86 /* Filter.swift in Sources */,
