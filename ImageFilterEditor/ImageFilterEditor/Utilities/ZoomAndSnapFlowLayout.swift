@@ -16,6 +16,13 @@ class ZoomAndSnapFlowLayout: UICollectionViewFlowLayout {
     let numberOfItemsToFitOnScreen: CGFloat = 5
     let itemSpacing: CGFloat = 16
     
+    override var itemSize: CGSize {
+        didSet {
+            guard let collectionView = collectionView else { return }
+            collectionView.reloadData()
+        }
+    }
+    
     var indexOfCenterItem: Int? {
         guard let collectionView = collectionView else { return nil }
         return collectionView.indexPathForItem(at: CGPoint(x: collectionView.bounds.midX, y: collectionView.bounds.midY))?.item
@@ -37,7 +44,7 @@ class ZoomAndSnapFlowLayout: UICollectionViewFlowLayout {
         minimumInteritemSpacing = itemSpacing
         
         guard let collectionView = collectionView else { return }
-        
+
         let itemWidth = (collectionView.frame.width / numberOfItemsToFitOnScreen) - minimumInteritemSpacing
         let maxItemHeight = collectionView.frame.height / (1 + zoomFactor)
         if itemWidth > maxItemHeight {

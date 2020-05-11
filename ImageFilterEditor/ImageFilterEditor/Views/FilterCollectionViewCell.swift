@@ -16,17 +16,11 @@ class FilterCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        configureCell()
-    }
-    
     private func configureCell() {
         let cellWidth = contentView.frame.size.width
-        layer.cornerRadius = cellWidth * 0.5
-        layer.borderWidth = cellWidth * 0.04
-        layer.borderColor = UIColor.lightGray.cgColor
+        layer.cornerRadius = cellWidth * 0.5 / 1.3 // TODO: adjust corner radius dynamically based on zoomFactor
+        layer.borderWidth = cellWidth * 0.05 / 1.3
+        layer.borderColor = UIColor.darkGray.cgColor
         layer.masksToBounds = true
     }
 }

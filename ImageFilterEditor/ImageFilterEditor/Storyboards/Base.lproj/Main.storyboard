@@ -40,7 +40,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.righthalf.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KNS-qn-lsi">
-                                                    <rect key="frame" x="24" y="25.000000000000004" width="32" height="30.333333333333332"/>
+                                                    <rect key="frame" x="22" y="23.000000000000007" width="36" height="34.333333333333336"/>
                                                     <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="KNS-qn-lsi" secondAttribute="height" multiplier="1:1" id="Fjc-Xh-lDv"/>
@@ -51,7 +51,7 @@
                                             <constraints>
                                                 <constraint firstItem="KNS-qn-lsi" firstAttribute="centerY" secondItem="ryQ-yK-ZQe" secondAttribute="centerY" id="8rL-uf-hf0"/>
                                                 <constraint firstItem="KNS-qn-lsi" firstAttribute="centerX" secondItem="ryQ-yK-ZQe" secondAttribute="centerX" id="Oa2-8y-Cex"/>
-                                                <constraint firstItem="KNS-qn-lsi" firstAttribute="width" secondItem="ryQ-yK-ZQe" secondAttribute="width" multiplier="0.4" id="f7D-fH-EsM"/>
+                                                <constraint firstItem="KNS-qn-lsi" firstAttribute="width" secondItem="ryQ-yK-ZQe" secondAttribute="width" multiplier="0.45" id="f7D-fH-EsM"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="80" height="80"/>
